@@ -1,11 +1,16 @@
 package com.itclj.common;
 
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView;
 import org.springframework.web.servlet.view.jasperreports.JasperReportsViewResolver;
+
+import javax.sql.DataSource;
 
 @Configuration
 public class JasperConfig extends WebMvcConfigurerAdapter {
@@ -14,6 +19,13 @@ public class JasperConfig extends WebMvcConfigurerAdapter {
     private final static String PATH_KEY = "classpath:jrxml/";
     private final static String TYPE_KEY = ".jrxml";
     private final static String VIEW_KEY = "report";
+
+    @Bean
+    @Primary
+    @ConfigurationProperties(prefix = "spring.datasource")
+    public DataSource primaryDataSource() {
+        return DataSourceBuilder.create().build();
+    }
 
     @Override
     public void configureDefaultServletHandling(final DefaultServletHandlerConfigurer configurer) {
